@@ -1,3 +1,42 @@
+vi /opt/scripts/service-monitor.sh
+
+#!/bin/bash
+serv=httpd
+sstat=stopped
+service $serv status | grep -i 'running\|stopped' | awk '{print $3}' | while read output;
+do
+echo $output
+if [ "$output" == "$sstat" ]; then
+    service $serv start
+    echo "$serv service is UP now.!" | mail -s "$serv service is DOWN and restarted now On $(hostname)" daygeek@gmail.com
+    else
+    echo "$serv service is running"
+    fi
+done
+
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+
+#!/bin/bash
+
+
+service nginx status > output.txt
+
+if grep -q "running" output.txt; then    
+echo "The Nginx service is running"
+else
+service nginx start 
+echo "The Nginx service was stopped, errored, or inactive. The service has been started." | mail -s "The Nginx service was stopped" myemailaddress@mydomain.com;
+fi
+
+sudo rm -f output.txt
+
+
+
+
+
+
 Git rebase:
 
 28  mkdir git-rebase
